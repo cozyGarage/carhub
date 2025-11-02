@@ -27,11 +27,36 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is automatically deployed to GitHub Pages when changes are pushed to the `main` branch.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### CI/CD Pipeline
+
+The project includes three GitHub Actions workflows:
+
+1. **Deploy to GitHub Pages** (`deploy.yml`) - Automatically deploys the site to GitHub Pages when changes are pushed to `main`
+2. **Pull Request Validation** (`pr-validation.yml`) - Validates PRs by running linting, building, and checking bundle size
+3. **Run Tests** (`test.yml`) - Runs linting and build tests on feature branches
+
+### Manual Deployment
+
+To build the static site locally:
+
+```bash
+npm run build
+```
+
+This will create an optimized production build in the `out` directory.
+
+### GitHub Pages Setup
+
+To enable GitHub Pages deployment:
+
+1. Go to your repository settings
+2. Navigate to "Pages" under "Code and automation"
+3. Under "Source", select "GitHub Actions"
+4. The site will be automatically deployed on the next push to `main`
 
 
 Car_hub

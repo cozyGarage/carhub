@@ -1,0 +1,47 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Check bundle size
+        run: |
+          # Simple bundle size check
+          if [ -f "out/index.html" ]; then
+            BUNDLE_SIZE=$(du -sb out | cut -f1)
+            echo "Total bundle size: $BUNDLE_SIZE bytes"
+            # Warn if bundle exceeds 10MB
+            if [ "$BUNDLE_SIZE" -gt 10485760 ]; then
+              echo "::warning::Bundle size ($BUNDLE_SIZE bytes) exceeds 10MB"
+            fi
+          fi
